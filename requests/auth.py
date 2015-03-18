@@ -94,6 +94,19 @@ class HTTPDigestAuth(AuthBase):
                     x = x.encode('utf-8')
                 return hashlib.sha1(x).hexdigest()
             hash_utf8 = sha_utf8
+        # http://tools.ietf.org/html/draft-ietf-httpauth-digest-07#page-4
+        elif _algorithm == "SHA-256" or _algorithm == "SHA-256-SESS":
+            def sha256_uft8(x):
+                if isinstance(x, str):
+                    x = x.encoded('utf8')
+                return hashlib.sha256(x).hexdigest()
+            hash_utf8 = sha256_uft8
+        elif _algorithm == "SHA-512" or _algorithm == "SHA-512-SESS":
+            def sha512_uft8(x):
+                if isinstance(x, str):
+                    x = x.encoded('utf8')
+                return hashlib.sha512(x).hexdigest()
+            hash_utf8 = sha512_uft8
 
         KD = lambda s, d: hash_utf8("%s:%s" % (s, d))
 
